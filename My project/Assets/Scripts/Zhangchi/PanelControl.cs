@@ -3,38 +3,45 @@ using UnityEngine.UI;
 
 public class PanelControl : MonoBehaviour
 {
-    [Tooltip("可选：指定要绑定隐藏事件的按钮，如果不指定则自动在子物体中查找")]
+    [Tooltip("需要控制显示/隐藏的面板")]
+    public GameObject Panel;
+
+    [Tooltip("可选：指定要绑定隐藏事件的按钮，如果不指定则自动在 Panel 的子物体中查找")]
     public Button hideButton;
 
     private void Awake()
     {
-        // 确保面板在游戏运行时立即显示（因为初始状态可能是隐藏的）
-        gameObject.SetActive(true);
+        // 游戏开始时显示面板
+        if (Panel != null)
+            Panel.SetActive(true);
+        else
+            Debug.LogError("PanelControl：未指定需要控制的面板！");
     }
 
     private void Start()
     {
-        // 如果没有手动指定按钮，尝试从子物体中获取第一个 Button 组件
-        if (hideButton == null)
+        // 如果没有手动指定按钮，则尝试在 Panel 的子物体中查找第一个 Button
+        if (hideButton == null && Panel != null)
         {
-            hideButton = GetComponentInChildren<Button>();
+            hideButton = Panel.GetComponentInChildren<Button>();
         }
 
         if (hideButton != null)
         {
-            // 添加点击监听，避免重复绑定（先移除再添加）
+            // 先移除再添加，防止重复绑定
             hideButton.onClick.RemoveListener(HidePanel);
             hideButton.onClick.AddListener(HidePanel);
         }
         else
         {
-            Debug.LogWarning("未找到可用的按钮，无法自动绑定隐藏功能。");
+            Debug.LogWarning("未找到可用的按钮，请手动将按钮拖拽到 hideButton 字段");
         }
     }
 
-    // 公有方法，供按钮事件或外部调用，用于隐藏面板
+    // 公有方法，供按钮点击调用
     public void HidePanel()
     {
-        gameObject.SetActive(false);
+        if (Panel != null)
+            Panel.SetActive(false);
     }
 }

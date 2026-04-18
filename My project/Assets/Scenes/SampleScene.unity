@@ -4170,6 +4170,7 @@ GameObject:
   - component: {fileID: 1452916481}
   - component: {fileID: 1452916484}
   - component: {fileID: 1452916483}
+  - component: {fileID: 1452916485}
   - component: {fileID: 1452916482}
   m_Layer: 5
   m_Name: CanvasForest
@@ -4261,6 +4262,20 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1452916485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1452916480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 765071db7cf884a46a15c40e74662424, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Panel: {fileID: 1531629298}
+  hideButton: {fileID: 238752832}
 --- !u!1 &1463294052 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b0a9744a3a917f9499f4db4494901e15, type: 3}
@@ -4277,14 +4292,13 @@ GameObject:
   - component: {fileID: 1531629299}
   - component: {fileID: 1531629301}
   - component: {fileID: 1531629300}
-  - component: {fileID: 1531629302}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: GameStart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1531629299
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4348,19 +4362,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1531629298}
   m_CullTransparentMesh: 1
---- !u!114 &1531629302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1531629298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 765071db7cf884a46a15c40e74662424, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hideButton: {fileID: 238752832}
 --- !u!1 &1590455041
 GameObject:
   m_ObjectHideFlags: 0
