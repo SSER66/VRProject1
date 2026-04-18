@@ -3,45 +3,93 @@ using UnityEngine.UI;
 
 public class PanelControl : MonoBehaviour
 {
-    [Tooltip("需要控制显示/隐藏的面板")]
-    public GameObject Panel;
+    [Tooltip("需要控制的目标面板")]
+    public GameObject targetPanel;
 
-    [Tooltip("可选：指定要绑定隐藏事件的按钮，如果不指定则自动在 Panel 的子物体中查找")]
+    [Tooltip("关闭按钮（自动找子物体Button）")]
     public Button hideButton;
+
+    [Tooltip("当前面板在UIPanelManager.panelOrderList中的索引")]
+    public int panelIndex = 0;
+
+    [Tooltip("关闭时是否自动显示下一个面板")]
+    public bool showNextPanelOnHide = true;
 
     private void Awake()
     {
-        // 游戏开始时显示面板
-        if (Panel != null)
-            Panel.SetActive(true);
+        // 未配置目标面板时，默认使用自身
+        if (targetPanel == null)
+        {
+            targetPanel = gameObject;
+            Debug.LogWarning($"PanelControl: 未配置targetPanel，使用自身 {gameObject.name}");
+        }
+
+        // 初始隐藏面板
+        if (targetPanel != null)
+            targetPanel.SetActive(false);
         else
-            Debug.LogError("PanelControl：未指定需要控制的面板！");
+            Debug.LogError("PanelControl: 目标面板为空！");
     }
 
     private void Start()
     {
-        // 如果没有手动指定按钮，则尝试在 Panel 的子物体中查找第一个 Button
-        if (hideButton == null && Panel != null)
-        {
-            hideButton = Panel.GetComponentInChildren<Button>();
-        }
+        // 自动绑定关闭按钮
+        if (hideButton == null && targetPanel != null)
+            hideButton = targetPanel.GetComponentInChildren<Button>();
 
         if (hideButton != null)
         {
-            // 先移除再添加，防止重复绑定
-            hideButton.onClick.RemoveListener(HidePanel);
+            hideButton.onClick.RemoveAllListeners();
             hideButton.onClick.AddListener(HidePanel);
         }
         else
         {
-            Debug.LogWarning("未找到可用的按钮，请手动将按钮拖拽到 hideButton 字段");
+            Debug.LogWarning($"PanelControl: {gameObject.name} 未找到关闭按钮！");
         }
     }
 
-    // 公有方法，供按钮点击调用
+    // 隐藏面板（调用UIManager逻辑）
     public void HidePanel()
     {
-        if (Panel != null)
-            Panel.SetActive(false);
+        // 对话层激活时，禁止关闭普通面板
+        if (UIPanelManager.instance != null && UIPanelManager.instance.IsDialogueActive)
+        {
+            Debug.Log("PanelControl: 对话层激活中，无法关闭普通面板！");
+            return;
+        }
+
+        if (targetPanel != null)
+        {
+            targetPanel.SetActive(false);
+            Debug.Log($"PanelControl: 隐藏面板 [{panelIndex}] {targetPanel.name}");
+        }
+
+        // 触发下一个面板显示（由UIManager控制顺序）
+        if (showNextPanelOnHide && UIPanelManager.instance != null)
+        {
+            UIPanelManager.instance.ShowNextPanel();
+        }
     }
+
+    // 显示面板（调用UIManager逻辑）
+    public void ShowPanel()
+    {
+        if (UIPanelManager.instance != null)
+        {
+            UIPanelManager.instance.ShowPanel(panelIndex);
+        }
+        else
+        {
+            if (targetPanel != null)
+            {
+                targetPanel.SetActive(true);
+                Debug.Log($"PanelControl: 显示面板 [{panelIndex}] {targetPanel.name}");
+            }
+        }
+        // 显示面板时暂停对话自动触发
+        DialogManager.instance?.PauseDialogAutoTrigger();
+    }
+
+    // 刷新面板状态（同步UIManager的当前面板）
+    
 }
