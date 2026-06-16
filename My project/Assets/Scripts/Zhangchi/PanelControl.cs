@@ -10,7 +10,7 @@ public class PanelControl : MonoBehaviour
     public Button hideButton;
 
     [Tooltip("当前面板在UIPanelManager.panelOrderList中的索引")]
-    public int panelIndex = 0;
+    public int panelIndex = 4;
 
     [Tooltip("关闭时是否自动显示下一个面板")]
     public bool showNextPanelOnHide = true;
