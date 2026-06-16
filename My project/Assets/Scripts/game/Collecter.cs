@@ -3,7 +3,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class BasketCollector : MonoBehaviour
 {
-    public int scorePerFruit = 10;
+    public int scorePerFruit = 100;
 
     private void OnTriggerEnter(Collider other)
     {

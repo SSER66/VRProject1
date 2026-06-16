@@ -7,8 +7,15 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+            // ≥ı ºªØUI
+            if (UIManager.Instance != null)
+                UIManager.Instance.InitializeScore();
+        }
+        else
+            Destroy(gameObject);
     }
 
     public void AddScore(int value)
